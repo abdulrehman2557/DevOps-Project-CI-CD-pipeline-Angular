@@ -1,0 +1,66 @@
+<div class="container py-5 text-white">
+
+  <!-- Section Title -->
+  <div class="text-center mb-4" data-aos="fade-down">
+    <h2 class="fw-bold">My Resume</h2>
+    <p class="text-secondary">My Skills & History</p>
+  </div>
+
+  <!-- Work and Education Experience -->
+  <div class="row g-4 justify-content-center mt-3">
+
+    <!-- Education Experience -->
+    <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+      <div class="bg-dark rounded-4 p-4 h-100 shadow-lg border-start border-3" style="border-color: #6839FF;">
+        <h4 class="text-white mb-4" style="border-bottom: 2px solid #6839FF; display: inline-block;">🎓 Education</h4>
+        <div *ngFor="let edu of educationExperience" class="mb-4">
+          <h5 class="fw-semibold text-white">{{ edu.institution }}</h5>
+          <p class="mb-1 text-light fst-italic">{{ edu.degree }}</p>
+          <small class="text-muted">{{ edu.duration }}</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Work Experience -->
+    <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+      <div class="bg-dark rounded-4 p-4 h-100 shadow-lg border-start border-3" style="border-color: #6839FF;">
+        <h4 class="text-white mb-4" style="border-bottom: 2px solid #6839FF; display: inline-block;">💼 Work</h4>
+        <div *ngFor="let exp of workExperience" class="mb-4">
+          <h5 class="fw-semibold text-white">{{ exp.company }}</h5>
+          <p class="mb-1 text-light fst-italic">{{ exp.role }}</p>
+          <small class="text-muted">{{ exp.duration }}</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Skills -->
+  <div class="mt-5 pt-5 text-center">
+    <h2 class="fw-bold" data-aos="fade-up">My Skills</h2>
+    <div class="row g-4 justify-content-center text-center">
+      <div
+        class="col-md-4"
+        *ngFor="let skill of skills; let i = index"
+        [attr.data-aos]="'zoom-in'"
+        [attr.data-aos-delay]="(i + 1) * 100"
+      >
+        <div class="bg-dark rounded-4 p-4 shadow-sm h-100 text-start">
+          <h5 class="fw-bold text-white mb-3">
+  <i class="fa me-2 text-warning" [ngClass]="skill.icon"></i>{{ skill.title }}
+</h5>
+
+          <div class="d-flex flex-wrap gap-2">
+            <span
+              *ngFor="let s of skill.items"
+              class="badge bg-secondary text-light px-3 py-2 d-flex align-items-center"
+              style="font-size: 0.85rem;"
+            >
+              <i class="fa fa-circle-notch me-2"></i>{{ s }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

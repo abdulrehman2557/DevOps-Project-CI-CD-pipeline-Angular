@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-18.20.8" // Your NodeJS tool
-        docker "Docker-Local"    // Your Docker tool name in Jenkins
+        nodejs "NodeJS-18.20.8" // NodeJS tool only
     }
 
     stages {

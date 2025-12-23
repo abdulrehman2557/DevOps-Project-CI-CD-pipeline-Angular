@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-18.20.8" // NodeJS tool only
+        nodejs "NodeJS-18.20.8"
     }
 
     stages {
@@ -41,6 +41,8 @@ pipeline {
         stage('Docker Run') {
             steps {
                 echo 'Running Docker container...'
+                bat 'docker stop angular-container || echo Container not running'
+                bat 'docker rm angular-container || echo No container to remove'
                 bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'
             }
         }

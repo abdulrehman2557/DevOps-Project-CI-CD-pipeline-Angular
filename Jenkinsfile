@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-18.20.8" // Must match your NodeJS tool name
+        nodejs "NodeJS-18.20.8" // Your NodeJS tool
+        docker "Docker-Local"    // Your Docker tool name in Jenkins
     }
 
     stages {
@@ -31,9 +32,17 @@ pipeline {
             }
         }
 
-        stage('Docker Build (Optional)') {
+        stage('Docker Build') {
             steps {
-                echo 'Docker deployment steps will be added later'
+                echo 'Building Docker image...'
+                bat 'docker build -t my-angular-app:latest .'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                echo 'Running Docker container...'
+                bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'
             }
         }
     }

@@ -4,9 +4,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build -- --configuration production
+RUN npm run build --configuration production
 
-# Stage 2: Serve with nginx
+# Stage 2: Nginx
 FROM nginx:alpine
 COPY --from=build /app/dist/my-portfolio /usr/share/nginx/html
 EXPOSE 80

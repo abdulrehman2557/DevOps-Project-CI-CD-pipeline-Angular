@@ -6,7 +6,8 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+
+        stage('Checkout Code') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/abdulrehman2557/DevOps-Project-CI-CD-pipeline-Angular.git'
@@ -15,19 +16,22 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                echo 'Installing npm dependencies...'
                 bat 'npm install'
             }
         }
 
-        stage('Build Angular') {
+        stage('Build Angular App') {
             steps {
+                echo 'Building Angular project...'
                 bat 'ng build --configuration production'
             }
         }
 
         stage('Archive Build') {
             steps {
-                archiveArtifacts 'dist/**'
+                echo 'Archiving dist folder...'
+                archiveArtifacts artifacts: 'dist/**', fingerprint: true
             }
         }
 
@@ -36,11 +40,10 @@ pipeline {
                 echo 'Building Docker image...'
                 bat 'docker build -t my-angular-app:latest .'
 
-                echo 'Stopping and removing existing container if any...'
-                bat 'docker stop angular-container || echo Container not running'
-                bat 'docker rm angular-container || echo No container to remove'
+                echo 'Stopping & removing old container if exists...'
+                bat 'cmd /c "docker stop angular-container 2>nul & docker rm angular-container 2>nul & exit 0"'
 
-                echo 'Running Docker container...'
+                echo 'Running new Docker container...'
                 bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'
             }
         }
@@ -48,18 +51,12 @@ pipeline {
 
     post {
         success {
-            emailext (
-                subject: "Build SUCCESS: ${currentBuild.fullDisplayName}",
-                body: "The build was successful. Check artifacts at ${env.BUILD_URL}",
-                to: "abdulrehmanmubashir00001@gmail.com"
-            )
+            echo '✅ CI/CD Pipeline executed successfully'
+            echo '🌐 Open: http://localhost:4200'
         }
+
         failure {
-            emailext (
-                subject: "Build FAILURE: ${currentBuild.fullDisplayName}",
-                body: "The build failed. Check console output at ${env.BUILD_URL}",
-                to: "abdulrehmanmubashir00001@gmail.com"
-            )
+            echo '❌ CI/CD Pipeline failed'
         }
     }
 }

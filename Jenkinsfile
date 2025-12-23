@@ -27,19 +27,20 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Run') {
-            steps {
-                echo 'Building Docker image...'
-                bat 'docker build -t my-angular-app:latest .'
+      stage('Docker Build & Run') {
+    steps {
+        echo 'Building Docker image...'
+        bat 'docker build -t my-angular-app:latest .'
 
-                echo 'Stopping old container if exists...'
-                bat 'docker stop angular-container || echo Not running'
-                bat 'docker rm angular-container || echo Not found'
+        echo 'Removing old container if exists...'
+        bat '''
+        FOR /F %%i IN ('docker ps -aq -f name=angular-container') DO docker rm -f %%i
+        '''
 
-                echo 'Running new container...'
-                bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'
-            }
-        }
+        echo 'Running new container...'
+        bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'
+    }
+}
     }
 
     post {

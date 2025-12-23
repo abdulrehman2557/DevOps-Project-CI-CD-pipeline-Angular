@@ -20,15 +20,21 @@ pipeline {
             }
         }
 
+        stage('Build Angular App') {
+            steps {
+                echo 'Building Angular project...'
+                bat 'npx ng build --configuration production'
+            }
+        }
+
         stage('Docker Build & Run') {
             steps {
                 echo 'Building Docker image...'
                 bat 'docker build -t my-angular-app:latest .'
 
                 echo 'Removing old container if exists...'
-                bat '''
-                FOR /F %%i IN ('docker ps -aq -f "name=angular-container"') DO docker rm -f %%i
-                '''
+                // Safe remove: won't fail if container does not exist
+                bat 'docker rm -f angular-container || echo "No container to remove"'
 
                 echo 'Running new container...'
                 bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'

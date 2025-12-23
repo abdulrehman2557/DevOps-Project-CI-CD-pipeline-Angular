@@ -40,10 +40,18 @@ pipeline {
 
     post {
         success {
-            echo 'Build completed successfully!'
+            emailext (
+                subject: "Build SUCCESS: ${currentBuild.fullDisplayName}",
+                body: "The build was successful. Check artifacts at ${env.BUILD_URL}",
+                to: "abdulrehmanmubashir00001@gmail.com"
+            )
         }
         failure {
-            echo 'Build failed. Check console output.'
+            emailext (
+                subject: "Build FAILURE: ${currentBuild.fullDisplayName}",
+                body: "The build failed. Check console output at ${env.BUILD_URL}",
+                to: "abdulrehmanmubashir00001@gmail.com"
+            )
         }
     }
 }

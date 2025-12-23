@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-18.20.8" // Exact NodeJS name you configured in Jenkins
+        nodejs "NodeJS-18.20.8" // Must match your Jenkins NodeJS name
     }
 
     stages {
@@ -15,29 +15,25 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // For Windows use 'bat'
-                bat 'npm install'
+                bat 'npm install'        // Install project dependencies
             }
         }
 
         stage('Build Angular') {
             steps {
-                bat 'ng build --prod'
+                bat 'ng build --prod'    // Build Angular using global Angular CLI
             }
         }
 
         stage('Archive Build') {
             steps {
-                archiveArtifacts 'dist/**'
+                archiveArtifacts 'dist/**'   // Save build artifacts
             }
         }
 
-        stage('Docker Build (Optional, Later)') {
+        stage('Docker Build (Optional)') {
             steps {
-                echo 'Docker deployment steps will be added here later'
-                // Example placeholder:
-                // bat 'docker build -t angular-app:latest .'
-                // bat 'docker run -d -p 80:80 angular-app:latest'
+                echo 'Docker deployment steps will be added later'
             }
         }
     }

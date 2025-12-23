@@ -6,11 +6,10 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/abdulrehman2557/DevOps-Project-CI-CD-pipeline-Angular.git'
+                url: 'https://github.com/abdulrehman2557/DevOps-Project-CI-CD-pipeline-Angular.git'
             }
         }
 
@@ -28,22 +27,16 @@ pipeline {
             }
         }
 
-        stage('Archive Build') {
-            steps {
-                echo 'Archiving dist folder...'
-                archiveArtifacts artifacts: 'dist/**', fingerprint: true
-            }
-        }
-
         stage('Docker Build & Run') {
             steps {
                 echo 'Building Docker image...'
                 bat 'docker build -t my-angular-app:latest .'
 
-                echo 'Stopping & removing old container if exists...'
-                bat 'cmd /c "docker stop angular-container 2>nul & docker rm angular-container 2>nul & exit 0"'
+                echo 'Stopping old container if exists...'
+                bat 'docker stop angular-container || echo Not running'
+                bat 'docker rm angular-container || echo Not found'
 
-                echo 'Running new Docker container...'
+                echo 'Running new container...'
                 bat 'docker run -d -p 4200:80 --name angular-container my-angular-app:latest'
             }
         }
@@ -51,12 +44,11 @@ pipeline {
 
     post {
         success {
-            echo '✅ CI/CD Pipeline executed successfully'
+            echo '✅ CI/CD Pipeline SUCCESS'
             echo '🌐 Open: http://localhost:4200'
         }
-
         failure {
-            echo '❌ CI/CD Pipeline failed'
+            echo '❌ CI/CD Pipeline FAILED'
         }
     }
 }

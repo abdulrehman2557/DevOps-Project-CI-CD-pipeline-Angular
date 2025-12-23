@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS-18.20.8" // Must match your Jenkins NodeJS name
+        nodejs "NodeJS-18.20.8" // Must match your NodeJS tool name
     }
 
     stages {
@@ -15,19 +15,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'        // Install project dependencies
+                bat 'npm install'
             }
         }
 
         stage('Build Angular') {
             steps {
-                bat 'ng build --prod'    // Build Angular using global Angular CLI
+                bat 'ng build --configuration production'
             }
         }
 
         stage('Archive Build') {
             steps {
-                archiveArtifacts 'dist/**'   // Save build artifacts
+                archiveArtifacts 'dist/**'
             }
         }
 
